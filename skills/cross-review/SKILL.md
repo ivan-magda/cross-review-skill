@@ -1,6 +1,6 @@
 ---
 name: cross-review
-description: Use when the user requests cross-model code review, an independent second-model review, triage of AI review findings, or a bounded review-and-fix loop for a branch, diff, or PR.
+description: Use for cross-model review of code, diffs, branches, or PRs, including AI finding triage and bounded review-and-fix loops. For non-code artifacts, use cross-check.
 license: MIT
 ---
 
