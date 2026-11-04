@@ -2,7 +2,8 @@
 """Print a repeatable observation of a Git worktree; redirect outside the repo.
 
 Captures HEAD, status, index/unstaged diffs, and nonignored untracked files.
-Not an atomic snapshot or coverage of ignored, external, or submodule files.
+Not atomic; ignored/external files and nested-repository/submodule contents
+are outside coverage. Untracked nested repositories receive an unhashed marker.
 """
 
 import argparse
@@ -26,6 +27,8 @@ def git(repo, *args):
 def untracked_record(root, name):
     path = os.path.join(os.fsencode(root), name)
     mode = os.lstat(path).st_mode
+    if stat.S_ISDIR(mode):
+        return {"path": os.fsdecode(name), "type": "nested-repository"}
     digest = hashlib.sha256()
     if stat.S_ISLNK(mode):
         kind = "symlink"

@@ -64,7 +64,7 @@ These are natural-language task options, not a standalone `cross-review` command
 | Maximum review rounds | `1` |
 | Scope | Branch diff from the default branch's merge base, including staged, unstaged, and new untracked files |
 
-The reviewer keeps its normal tools, skills, MCP integrations, and settings. Claude runs with ordinary `claude -p`; there is no plan mode, safe mode, or tool allowlist. Read-only is an explicit task instruction. Codex additionally uses its read-only sandbox. A before/after repository snapshot detects tracked/index changes and untracked content changes, including edits that leave `git status` unchanged. It is not a security sandbox and does not cover ignored files or external side effects.
+The reviewer keeps its normal tools, skills, MCP integrations, and settings. Claude runs with ordinary `claude -p`; there is no plan mode, safe mode, or tool allowlist. Read-only is an explicit task instruction. Codex additionally uses its read-only sandbox. A before/after repository snapshot detects tracked/index changes and untracked content changes, including edits that leave `git status` unchanged. It is not a security sandbox and does not cover ignored files, external side effects, or contents of nested repositories/submodule worktrees. Untracked nested repositories are recorded as markers without content hashes.
 
 Each finding is checked and classified as **MUST FIX**, **SIMPLIFY**, **UNSURE**, or **REJECTED**. Findings about concurrency, persistence, security, payments, and data loss cannot be dismissed without evidence. Missing evidence remains visible as **UNSURE**.
 
@@ -90,7 +90,7 @@ The workflow never silently changes model families, hides CLI failures behind â€
 - [Reviewer brief](skills/cross-review/references/reviewer-prompt.md)
 - [Repository snapshot helper](skills/cross-review/scripts/snapshot.py)
 
-Run the three Git integration tests:
+Run the Git integration tests:
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v

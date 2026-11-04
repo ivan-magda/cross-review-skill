@@ -37,7 +37,7 @@ If the user supplies existing review comments and asks only for triage, start at
    python3 /absolute/path/to/cross-review/scripts/snapshot.py "$repo" > "$review_dir/before.json"
    ```
 
-The helper requires Python 3 and an existing Git `HEAD`. It records HEAD, status, index/worktree diffs, and untracked content. Status alone misses changes to already-modified files. It is a comparison aid, not a sandbox: ignored files, external side effects, and changes inside submodule worktrees are outside its coverage. If unavailable, capture equivalent evidence and state any gaps.
+The helper requires Python 3 and an existing Git `HEAD`. It records HEAD, status, index/worktree diffs, and untracked content. Status alone misses changes to already-modified files. It is a comparison aid, not a sandbox: ignored files, external side effects, and contents of nested repositories/submodule worktrees are outside its coverage. Untracked nested repositories appear as explicit markers without content hashes; disclose this gap when they matter to the scope. If unavailable, capture equivalent evidence and state any gaps.
 
 ## Review
 

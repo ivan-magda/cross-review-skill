@@ -90,6 +90,22 @@ class SnapshotTests(unittest.TestCase):
         self.assertEqual(before["status_porcelain_v1_z"], after["status_porcelain_v1_z"])
         self.assertNotEqual(before["untracked"], after["untracked"])
 
+    def test_untracked_nested_repository_is_marked_without_reading_its_contents(self):
+        # Git emits nested/ as a directory; treating every entry as a file aborts.
+        self.git("init", "-q", "nested")
+        nested_file = self.repo / "nested" / "file.txt"
+        nested_file.write_text("nested base\n")
+        self.git("-C", "nested", "add", ".")
+        self.git(
+            "-C", "nested", "-c", "user.name=Snapshot test",
+            "-c", "user.email=test@example.invalid", "-c", "commit.gpgsign=false",
+            "commit", "-qm", "nested base",
+        )
+        before = self.snapshot()
+        self.assertEqual(before["untracked"], [{"path": "nested/", "type": "nested-repository"}])
+        nested_file.write_text("nested edit outside coverage\n")
+        self.assertEqual(before, self.snapshot())
+
 
 if __name__ == "__main__":
     unittest.main()
