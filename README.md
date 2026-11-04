@@ -83,18 +83,12 @@ A raw review can still contain rejected findings when the loop stops. The aim is
 
 The workflow never silently changes model families, hides CLI failures behind “No significant findings,” or commits, pushes, merges, or posts comments without separate authorization.
 
-## Contents and validation
+## Contents
 
 - [Skill instructions](skills/cross-review/SKILL.md)
 - [CLI commands and effort settings](skills/cross-review/references/cli.md)
 - [Reviewer brief](skills/cross-review/references/reviewer-prompt.md)
 - [Repository snapshot helper](skills/cross-review/scripts/snapshot.py)
-
-Run the Git integration tests:
-
-```sh
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
-```
 
 The helper requires an existing Git `HEAD`. It observes state; it does not create a checkout or restore files.
 
