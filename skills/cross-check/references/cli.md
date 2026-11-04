@@ -83,6 +83,7 @@ done
 
 cd "$review_dir"
 claude -p --model "$review_model" --no-session-persistence \
+  --allowedTools "WebSearch,WebFetch" \
   "${source_args[@]}" \
   "${effort_args[@]}" \
   < "$review_dir/prompt.md" \
@@ -90,17 +91,14 @@ claude -p --model "$review_model" --no-session-persistence \
 review_status=$?
 ```
 
-Use ordinary print mode with normal tools and settings. Do not add `plan`, `safe-mode`, `bare`, `--tools`, `--allowedTools`, or permission-bypass flags. This is a **read-only assignment**, not an OS-enforced read-only Claude process. In headless mode, an operation requiring approval may be denied under existing permissions. The reviewer should report any resulting coverage gap; do not disable permission checks to make it proceed.
+Use ordinary print mode with normal tools and settings. `--allowedTools "WebSearch,WebFetch"` pre-approves web calls without restricting other tools. Do not add `plan`, `safe-mode`, `bare`, `--tools`, other `--allowedTools` entries, or permission-bypass flags. This is a **read-only assignment**, not an OS-enforced read-only Claude process. Calls needing other approvals may be denied; report the resulting coverage gaps.
 
 If an explicit effort conflicts with `CLAUDE_CODE_EFFORT_LEVEL`, use `env -u CLAUDE_CODE_EFFORT_LEVEL claude ...` for that invocation; do not change the user's persistent environment.
 
 ## Web access
 
-Verified with real calls on Codex 0.166.0 and Claude Code 2.1.317:
-
-- Codex's top-level `--search` works before `exec`; the command above performed native web search and opened an authoritative page outside a Git repository. `--skip-git-repo-check` enables that working directory. The live-search flag does not belong after `exec`.
-- Ordinary `claude -p --model opus --no-session-persistence` successfully used WebSearch and WebFetch without bypass flags. This installation's existing configuration selected `auto`; WebFetch ran through its configured `web-fetch` agent. This does not establish availability under a different installation or Manual-mode permissions. No web-enabling flag is added.
-- Both probes corrected a claim that Python dict insertion order became a language guarantee in 3.5, citing the [Python documentation](https://docs.python.org/3.11/library/stdtypes.html#mapping-types-dict) or [Python 3.7 release notes](https://docs.python.org/3/whatsnew/3.7.html). Tool results, not citations alone, confirmed retrieval.
+- Codex: put `--search` before `exec` to enable live search.
+- Claude: `--allowedTools "WebSearch,WebFetch"` pre-approves those tools when available. It does not provide missing tools or override network and policy restrictions.
 
 Check actual access each run. If unavailable, mark factual claims **unverified (model knowledge only)** unless inspected supplied sources support them, and list the coverage gap. Do not bypass permissions to enable search. `--json` (Codex) or `--output-format stream-json --verbose` (Claude) can capture diagnostic tool events; retain the final reviewer text separately when using them.
 
