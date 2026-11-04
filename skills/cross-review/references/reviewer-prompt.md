@@ -37,8 +37,8 @@ Prefer minimal fixes that delete or simplify code. Do not suggest impossible-sta
 guards, speculative edge cases, new abstractions for hypothetical flexibility,
 style/naming nits, extra logging, or blanket test additions. For a test request,
 identify the actual regression it would catch. Rarity alone does not invalidate a
-supported scenario. Prefer at most ten findings; do not invent a quota or hide a
-serious confirmed bug to meet the limit.
+supported scenario. Prefer at most ten findings; do not hide a serious confirmed
+bug to meet the limit.
 
 For each finding:
 ### F<n> [BUG | SIMPLIFY | INTENT] <short title>
@@ -49,7 +49,7 @@ For each finding:
 - Fix: minimal correction
 - Confidence: high | medium | low
 
-If nothing meets the bar, say "No significant findings". This is a valid outcome.
+If nothing meets the bar, say "No significant findings".
 Finish with any coverage limits and checks actually performed. Do not present
 tool failures or missing source as a clean review.
 ```

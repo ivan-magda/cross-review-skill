@@ -78,6 +78,7 @@ fi
 
 cd "$repo"
 claude -p --model "$review_model" --no-session-persistence \
+  --add-dir "$review_dir" \
   "${effort_args[@]}" \
   < "$review_dir/prompt.md" \
   > "$review_dir/review.md" 2> "$review_dir/run.log"
@@ -90,7 +91,9 @@ If an explicit effort conflicts with `CLAUDE_CODE_EFFORT_LEVEL`, use `env -u CLA
 
 ## Completion and failures
 
-Prefer the harness's background execution and completion notification. Otherwise use bounded waits and occasional progress updates; reviews can take several minutes. A shell tool returning a running-session ID is not completion. If a shell uses `set -e`, capture failure with an `if`/`else` rather than letting it skip the exit-status check.
+If evidence shows the author's sandbox blocked the reviewer CLI, request narrowly scoped approval for that command through the harness's normal mechanism, when available and permitted. Retry only after approval; if escalation is unavailable, denied, or forbidden (for example, approval policy `never`), report the review as incomplete.
+
+Wait for the reviewer to exit using the harness's background completion notification or bounded waits with occasional progress updates. If a shell uses `set -e`, capture failure with an `if`/`else` rather than letting it skip the exit-status check.
 
 After exit, inspect `review_status`, `run.log`, and `review.md`. A zero exit code is necessary but not sufficient: check for errors, blocked reads, missing modules, or incomplete output. Preserve failure artifacts, label the result incomplete, and do not triage an error message as a finding. A retry for a clear transient execution failure is not another opinion round; keep it bounded and visible.
 
