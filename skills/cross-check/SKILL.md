@@ -62,7 +62,9 @@ Later rounds check only edits plus necessary context and carry prior disposition
 
 Use the user's language. Include reviewer/model and requested/effective effort (or unreported), context and any inference, artifact/type, rounds/limit and stop reason, raw review paths, web availability, extraction losses, and other coverage limits.
 
-Group findings under nonempty MUST FIX / SIMPLIFY / UNSURE / REJECTED headings: one line each with ID, section + exact quote (≤25 words), and reason/minimal edit. In fix mode include FIXED or SKIPPED for every finding; FIXED requires verified completion.
+Under each nonempty triage category, use one line per finding with an exact quote of ≤25 words:
+`- ID · section — "quote": reason; minimal edit.`
+In fix mode append FIXED or SKIPPED to every finding; FIXED requires verified completion.
 
 For hypotheses, plans, and decisions, include at most two surviving strongest objections and concrete observable falsification/failure criteria. Add **Bottom line:** one triager sentence such as “holds,” “holds with fixes,” or “does not hold as stated”; keep unresolved central claims visible.
 
