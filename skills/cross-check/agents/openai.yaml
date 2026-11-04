@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cross-model check"
+  short_description: "Independent checks of ideas, plans, and documents"
+  default_prompt: "Use $cross-check on this document or hypothesis and report only verified problems and useful simplifications."
