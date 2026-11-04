@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cross-model review"
+  short_description: "Independent review with evidence-based triage"
+  default_prompt: "Use $cross-review to review the current changes with another model and report only confirmed issues and useful simplifications."
