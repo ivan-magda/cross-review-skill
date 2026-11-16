@@ -105,6 +105,4 @@ Cross-review also includes the [repository snapshot helper](skills/cross-review/
 
 When changing CLI flags, update both `references/cli.md` files.
 
-Inspired by the review approach in *Agentic Engineering*, particularly filtering defensive review noise and checking changes with another model family. The book and private development transcripts are not distributed here.
-
 [MIT license](LICENSE).
