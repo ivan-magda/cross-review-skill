@@ -24,14 +24,14 @@ Ask for a finite maximum if the user requests a loop without one. Establish the 
 ## Prepare
 
 1. Identify files or conversation text and type: hypothesis, plan, decision, spec, research, document, or other. Infer 1–3 sentences covering goal, audience, and supported decision/action; ask only if inference is impossible. Show inferred context in the report.
-2. Create a directory outside any repository: `mktemp -d "${TMPDIR:-/tmp}/cross-check.XXXXXX"`. Copy inputs or save conversation text into `artifact/`. Write `context.md`. Keep original paths with the author; give the reviewer copy paths.
+2. Create the review directory outside any repository: `review_dir=$(mktemp -d "${TMPDIR:-/tmp}/cross-check.XXXXXX")`. Copy inputs or save conversation text into `$review_dir/artifact/`. Write `context.md`. Keep original paths with the author; give the reviewer copy paths.
 3. Extract PDF/DOCX text here; record losses such as layout, tables, images, footnotes, or OCR errors. Supply relevant sources as copies or read-only context.
 4. If artifacts or sources appear confidential (NDA, personal data, credentials, unpublished business data), explain the proposed material/provider and ask before sending. Wait for consent; offer redacted copies where useful.
-5. Hash copies and originals with SHA-256. Preserve pre-fix copies; leave reviewer inputs unchanged during each run and use a fresh directory each round.
+5. Hash copies and originals with SHA-256. Preserve pre-fix copies; leave reviewer inputs unchanged during each run and use a fresh review directory each round.
 
 ## Review
 
-Read [CLI reference](references/cli.md) and fill [the reviewer brief](references/reviewer-prompt.md). Run a fresh reviewer from the artifact directory with normal tools, skills, MCP, and settings. Do not narrow tools or use plan/safe mode. Sources are read-only; the reviewer must not edit files or invoke `cross-review` or `cross-check` recursively.
+Read [CLI reference](references/cli.md) and fill [the reviewer brief](references/reviewer-prompt.md). Run a fresh reviewer from the review directory with normal tools, skills, MCP, and settings. Do not narrow tools or use plan/safe mode. Sources are read-only; the reviewer must not edit files or invoke `cross-review` or `cross-check` recursively.
 
 Apply the brief's type-specific checks, including objections and falsification/failure criteria for hypotheses, plans, and decisions.
 

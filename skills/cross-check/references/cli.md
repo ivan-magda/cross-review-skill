@@ -1,8 +1,8 @@
 # Reviewer CLI commands
 
-Run from the artifact directory outside any repository. These examples use Bash/Zsh arrays so paths and options stay separate arguments. Set `review_dir`, `review_model`, optional `review_effort`, and `source_dirs=()` (or absolute extra-source directories); `review_dir/prompt.md` is the completed brief. Give each round its own directory. Do not paste artifact text into shell commands or use `eval`.
+Run from `review_dir`, the per-round directory outside any repository that holds `artifact/`. These examples use Bash/Zsh arrays so paths and options stay separate arguments. Set `review_dir`, `review_model`, optional `review_effort`, and `source_dirs=()` (or absolute extra-source directories); `review_dir/prompt.md` is the completed brief. Give each round its own directory. Do not paste artifact text into shell commands or use `eval`.
 
-## Select and check
+## Select
 
 | Author | Reviewer CLI | Default model |
 | --- | --- | --- |
@@ -11,23 +11,7 @@ Run from the artifact directory outside any repository. These examples use Bash/
 
 Honor an explicit model override. Changing from one model to another within the same family does not provide the requested cross-family review. For another provider, use its documented noninteractive CLI only when explicitly selected; this skill does not assume its flags.
 
-Check the selected executable, version, and authentication before starting:
-
-```sh
-command -v codex
-codex --version
-codex login status
-```
-
-or:
-
-```sh
-command -v claude
-claude --version
-claude auth status
-```
-
-Missing executable/authentication is a blocker for that reviewer. Report it without falling back to your own family. Do not expose credentials or change login/configuration automatically.
+A missing executable or authentication surfaces when the run fails; it is a blocker for that reviewer. Report it without falling back to your own family. Do not expose credentials or change login/configuration automatically.
 
 ## Thinking / reasoning effort
 
@@ -62,7 +46,7 @@ codex --search -a never exec --model "$review_model" \
   "${effort_args[@]}" \
   -o "$review_dir/review.md" - \
   < "$review_dir/prompt.md" > "$review_dir/run.log" 2>&1
-review_status=$?
+echo "$?" > "$review_dir/status"
 ```
 
 `--sandbox read-only` constrains sandboxed commands; it is not a blanket prohibition on every connector's side effects. The review brief governs use of normal MCP/tools as well. `--ephemeral` disables session persistence, not the user's tools or settings. Do not pass write-enabled sandbox flags or permission-bypass flags.
@@ -88,7 +72,7 @@ claude -p --model "$review_model" --no-session-persistence \
   "${effort_args[@]}" \
   < "$review_dir/prompt.md" \
   > "$review_dir/review.md" 2> "$review_dir/run.log"
-review_status=$?
+echo "$?" > "$review_dir/status"
 ```
 
 Use ordinary print mode with normal tools and settings. `--allowedTools "WebSearch,WebFetch"` pre-approves web calls without restricting other tools. Do not add `plan`, `safe-mode`, `bare`, `--tools`, other `--allowedTools` entries, or permission-bypass flags. This is a **read-only assignment**, not an OS-enforced read-only Claude process. Calls needing other approvals may be denied; report the resulting coverage gaps.
@@ -106,9 +90,9 @@ Check actual access each run. If unavailable, mark factual claims **unverified (
 
 If evidence shows the author's sandbox blocked the reviewer CLI, request narrowly scoped approval for that command through the harness's normal mechanism, when available and permitted. Retry only after approval; if escalation is unavailable, denied, or forbidden (for example, approval policy `never`), report the review as incomplete.
 
-Wait for the reviewer to exit using the harness's background completion notification or bounded waits with occasional progress updates. If a shell uses `set -e`, capture failure with an `if`/`else` rather than letting it skip the exit-status check.
+Wait for the reviewer to exit using the harness's background completion notification or bounded waits with occasional progress updates. If a shell uses `set -e`, capture failure with an `if`/`else` rather than letting it skip the status write.
 
-After exit, inspect `review_status`, `run.log`, and `review.md`. A zero exit code is necessary but not sufficient: check for errors, blocked reads, missing modules, or incomplete output. Preserve failure artifacts, label the result incomplete, and do not triage an error message as a finding. A retry for a clear transient execution failure is not another opinion round; keep it bounded and visible.
+After exit, inspect `$review_dir/status`, `run.log`, and `review.md`. The snippets write the exit code to a file because shell variables do not survive a background run or a later tool call. A zero exit code is necessary but not sufficient: check for errors, blocked reads, missing modules, or incomplete output. Preserve failure artifacts, label the result incomplete, and do not triage an error message as a finding. A retry for a clear transient execution failure is not another opinion round; keep it bounded and visible.
 
 ## Primary references
 

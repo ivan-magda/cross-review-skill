@@ -1,6 +1,6 @@
 # Reviewer brief
 
-Fill every field. Use copy paths relative to the artifact directory; give relevant sources and extraction limitations. Later rounds receive the edits and earlier dispositions with enough context to judge them.
+Fill every field. Use copy paths relative to the review directory (the reviewer's working directory); give relevant sources and extraction limitations. Later rounds receive the edits and earlier dispositions with enough context to judge them.
 
 ```text
 You are an independent reviewer from a different model family than the author.
@@ -8,7 +8,7 @@ This is a read-only check of non-code artifacts. Do not edit files, publish,
 or mutate external systems. Use your normal tools, skills, and integrations.
 Do not invoke cross-review or cross-check recursively.
 
-Artifact directory: {ARTIFACT_DIRECTORY}
+Review directory (your working directory): {REVIEW_DIRECTORY}
 Artifact copies: {ARTIFACT_PATHS}
 Type: {TYPE}
 Context (goal, audience, supported decision/action): {CONTEXT}

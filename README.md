@@ -25,7 +25,7 @@ Omit `-g` to install only in the current project. Use one `-a` option to select 
 npx skills add ivan-magda/cross-review-skill --list
 ```
 
-Both require Node.js supported by the skills CLI and the **other** model's authenticated CLI. Cross-review also uses Git and Python 3 for its repository-state helper. Cross-check needs no Git repository or helper. Neither skill installs model CLIs or changes authentication.
+Both require Node.js supported by the skills CLI and the **other** model's authenticated CLI. Cross-review also uses Git (2.31+) and a POSIX shell for its repository-state helper. Cross-check needs no Git repository or helper. Neither skill installs model CLIs or changes authentication.
 
 ## Use cross-review
 
@@ -85,7 +85,7 @@ Both skills use these defaults:
 
 Cross-review covers the branch diff from the default branch's merge base, including staged, unstaged, and new untracked files. Cross-check covers the supplied material and copies the review artifacts into a separate working directory, preserving the original in report mode. Before sending confidential material to another provider, the author asks for permission.
 
-The reviewer keeps its normal tools, skills, MCP integrations, and settings. Read-only is a task instruction; Codex also uses its read-only sandbox. Cross-review compares repository snapshots before and after review, including changes that leave `git status` unchanged. The helper requires an existing Git `HEAD`; it observes state and does not create a checkout or restore files. It is not a security sandbox: ignored files, external side effects, and nested repository/submodule contents fall outside its coverage. Untracked nested repositories appear as markers without content hashes.
+The reviewer keeps its normal tools, skills, MCP integrations, and settings. Read-only is a task instruction; Codex also uses its read-only sandbox. Cross-review compares repository snapshots before and after review, including changes that leave `git status` unchanged. The helper writes its objects to a store outside the repository and does not change the working tree, index, or refs; it does not create a checkout or restore files. It is not a security sandbox: ignored files, external side effects, and nested repository/submodule contents fall outside its coverage. Nested repositories are recorded only by their HEAD.
 
 The author checks findings against evidence and keeps unresolved questions visible. Both skills classify findings as **MUST FIX**, **SIMPLIFY**, **UNSURE**, or **REJECTED**. Each skill lists protected categories that require evidence before rejection. Cross-check requires sources for factual claims; agreement between models is not proof.
 
@@ -101,7 +101,7 @@ Neither skill treats reviewer confidence as evidence, hides CLI failures behind 
 | CLI commands and effort | [CLI reference](skills/cross-review/references/cli.md) | [CLI reference](skills/cross-check/references/cli.md) |
 | Reviewer brief | [Brief](skills/cross-review/references/reviewer-prompt.md) | [Brief](skills/cross-check/references/reviewer-prompt.md) |
 
-Cross-review also includes the [repository snapshot helper](skills/cross-review/scripts/snapshot.py).
+Cross-review also includes the [repository snapshot helper](skills/cross-review/scripts/snapshot.sh).
 
 When changing CLI flags, update both `references/cli.md` files.
 
